@@ -10,7 +10,7 @@ type Props = {
 
 const dummyData: Restaurant = {
     id: 'string',
-    imgUrl: 'https://links.papareact.com/wru',
+    imgUrl: 'https://links.papareact.com/gn7',
     title: 'string',
     rating: 'string',
     genre: 'string',

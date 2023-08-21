@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { View, Text, SafeAreaView, Image, TextInput } from 'react-native';
 import { ChevronDownIcon, UserIcon, AdjustmentsVerticalIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
+import sanityClient from '../sanity';
 
 function HomeScreen() {
     const navigation = useNavigation();
+    const [featuredCategories, setFeaturedCategories] = useState([]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -15,12 +17,28 @@ function HomeScreen() {
         });
     }, []);
 
+    useEffect(() => {
+        sanityClient
+            .fetch(
+                `*[_type == "featured"] {
+            ...,
+            restaurants[]-> {
+              ...,
+              dishes[]->
+            }
+          }`
+            )
+            .then((data) => {
+                setFeaturedCategories(data);
+            });
+    }, []);
+
     return (
         <SafeAreaView className='bg-white pt-5'>
             <View className='flex-row pb-3 items-center mx-4 space-x-2'>
                 <Image
                     source={{
-                        uri: 'https://links.papareact.com/wru',
+                        uri: 'https://images.prismic.io/dbhq-deliveroo-riders-website/ed825791-0ba4-452c-b2cb-b5381067aad3_RW_hk_kit_importance.png?auto=compress,format&rect=0,0,1753,1816&w=1400&h=1450',
                     }}
                     className='h-7 w-7 bg-gray-300 p-4 rounded-full'
                 />
